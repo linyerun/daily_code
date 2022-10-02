@@ -4,20 +4,33 @@ import (
 	"fmt"
 	"log"
 	. "server/redis"
+	"sync"
 )
 
-type SeckillService struct {
+var (
+	s    *seckillService
+	once sync.Once
+)
+
+type seckillService struct {
 }
 
-func (s SeckillService) AddProduct() (err error) {
+func NewSeckillService() *seckillService {
+	once.Do(func() {
+		s = &seckillService{}
+	})
+	return s
+}
+
+func (s seckillService) AddProduct() (err error) {
 	client := NewRedisClient()
 	defer client.Close()
-	reply, err := client.Do("set %s %d", "product_apples", 100)
-	log.Println(reply)
+	reply, err := client.Do("set", "product_apples", 100)
+	log.Printf("result: %v\n", reply.(string))
 	return
 }
 
-func (s SeckillService) SeckillProduct(userId int64) error {
+func (s seckillService) SeckillProduct(userId int64) error {
 	// 1. 连接redis客户端
 	client := NewRedisClient()
 	defer client.Close()

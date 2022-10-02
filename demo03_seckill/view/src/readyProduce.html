@@ -8,6 +8,7 @@
 <div id="app">
     <h1>点击下面按钮进行秒杀产品添加</h1>
     <button @click="action">添加</button>
+    <h1 v-if="show">{{msg}}</h1>
 </div>
 <script src="../resources/vue.min.js"></script>
 <script src="../resources/axios.min.js"></script>
@@ -15,10 +16,18 @@
     new Vue({
         el: '#app',
         data: {
+            BASE_URL: "http://localhost:9090",
+            show: false,
+            msg: {}
         },
         methods: {
             action() {
-                alert('添加')
+               axios.post(this.BASE_URL+"/seckill/product/ready").then(res => {
+                   this.msg = res.data
+                   this.show = true
+               }).catch(err => {
+                   console.log(err)
+               })
             }
         },
     })

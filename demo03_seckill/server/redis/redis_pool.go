@@ -41,6 +41,7 @@ func poolInitRedis(server string, password string) *redigo.Pool {
 //单例模式创建redis pool
 func newRedisPool() *redigo.Pool {
 	once.Do(func() {
+		InitRedisConfig() //初始化下面需要用到的配置
 		redisPool = poolInitRedis(Addr+fmt.Sprintf(":%d", Port), Pwd)
 	})
 	return redisPool
