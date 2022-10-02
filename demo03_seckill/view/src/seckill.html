@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>秒杀页面</title>
+</head>
+<body>
+<div id="app">
+    <h1>点击下面按钮进行秒杀</h1>
+    <button @click="action">秒杀</button>
+</div>
+<script src="../resources/vue.min.js"></script>
+<script src="../resources/axios.min.js"></script>
+<script>
+    new Vue({
+        el: '#app',
+        data: {
+        },
+        methods: {
+            action() {
+                alert('哈哈哈')
+            }
+        },
+    })
+
+</script>
+</body>
+</html>

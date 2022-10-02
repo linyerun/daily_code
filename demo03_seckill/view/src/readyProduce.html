@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>添加秒杀产品</title>
+</head>
+<body>
+<div id="app">
+    <h1>点击下面按钮进行秒杀产品添加</h1>
+    <button @click="action">添加</button>
+</div>
+<script src="../resources/vue.min.js"></script>
+<script src="../resources/axios.min.js"></script>
+<script>
+    new Vue({
+        el: '#app',
+        data: {
+        },
+        methods: {
+            action() {
+                alert('添加')
+            }
+        },
+    })
+</script>
+</body>
+</html>
