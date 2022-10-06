@@ -8,6 +8,9 @@
 <div id="app">
     <h1>点击下面按钮进行秒杀</h1>
     <button @click="action">秒杀</button>
+    <div v-if="show">
+        <h3>{{msg}}</h3>
+    </div>
 </div>
 <script src="../resources/vue.min.js"></script>
 <script src="../resources/axios.min.js"></script>
@@ -15,10 +18,23 @@
     new Vue({
         el: '#app',
         data: {
+            BASE_URL: "http://localhost:9090",
+            show: false,
+            msg: {},
         },
         methods: {
             action() {
-                alert('哈哈哈')
+                let userId = Math.floor(Math.random() * 100)
+                axios
+                    .post(this.BASE_URL+`/seckill/product/go/`+userId)
+                    .then(res => {
+                        this.msg = res.data
+                        this.msg.userId = userId
+                        this.show = true
+                    })
+                    .catch(err => {
+                        console.log(err)
+                    })
             }
         },
     })

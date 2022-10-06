@@ -3,7 +3,6 @@ package main
 import (
 	"github.com/gin-gonic/gin"
 	"gopkg.in/ini.v1"
-	"log"
 	"net/http"
 	"server/router"
 )
@@ -30,7 +29,8 @@ func init() {
 // Cors 处理跨域请求,支持options访问
 func Cors() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		log.Println("执行跨域请求处理")
+		//每次请求进来都会执行这个代码
+		//log.Println("执行跨域请求处理")
 		method := c.Request.Method
 		c.Header("Access-Control-Allow-Origin", "*")
 		c.Header("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE, UPDATE")

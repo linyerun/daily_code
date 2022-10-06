@@ -6,9 +6,10 @@ import (
 )
 
 func InitRouter(r *gin.Engine) {
-	authGroup := r.Group("/seckill/product")
+	seckillGroup := r.Group("/seckill/product")
 	{
-		authGroup.POST("/ready", Ready)
-		authGroup.POST("/go", Go)
+		seckillGroup.POST("/ready", Ready)
+		seckillGroup.POST("/go/:userId", Go)
+		seckillGroup.POST("/test/go", TestGo)
 	}
 }
