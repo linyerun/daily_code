@@ -6,6 +6,7 @@ import (
 	"log"
 	"net"
 	"sync"
+	"time"
 )
 
 type Server struct {
@@ -50,14 +51,16 @@ func (s *Server) handler(user *User) {
 	go func() {
 		buf := make([]byte, 1024*4) //大小4KB
 		for {
+			user.Conn.SetReadDeadline(time.Now().Add(10 * time.Minute))
 			n, err := user.Conn.Read(buf)
 			//nc被退出时触发，下线
 			if n == 0 {
-				user.Offline()
+				user.Offline() //下线
 				return
 			}
 			//异常处理(ctrl+c退出不属于io.EOF，所以丢在下面吧)
 			if err != nil && err != io.EOF {
+				user.Offline() //出现异常，下线
 				log.Printf("Conn.Read err: %v\n", err)
 				return
 			}

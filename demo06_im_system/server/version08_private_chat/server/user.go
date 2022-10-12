@@ -55,6 +55,7 @@ func (u *User) Offline() {
 	s.lock.Lock()
 	delete(s.onlineUsers, u.Name)
 	s.lock.Unlock()
+	u.Conn.Close() //关闭连接
 }
 
 // SendMessage 发送信息给自己的客户端
@@ -72,9 +73,14 @@ func (u *User) DealWithMessage(msg string) {
 		}
 		s.lock.RUnlock()
 		return
-	} else if msg[:6] == "rename" {
+	} else if strings.HasPrefix(msg, "rename") {
 		msg = strings.ReplaceAll(msg, " ", "")
-		name := strings.Split(msg, "|")[1]
+		arr := strings.Split(msg, "|")
+		if len(arr) != 2 {
+			u.SendMessage("指令有误，正确格式：rename|xxx\n")
+			return
+		}
+		name := arr[1]
 		s.lock.RLock()
 		_, ok := s.onlineUsers[name]
 		s.lock.RUnlock()
@@ -90,6 +96,24 @@ func (u *User) DealWithMessage(msg string) {
 		s.onlineUsers[name] = u //加入最新的
 		s.lock.Unlock()
 		u.SendMessage("修改成功\n")
+		return
+	} else if strings.HasPrefix(msg, "to") {
+		//分解
+		arr := strings.Split(msg, "|")
+		//校验
+		if len(arr) != 3 {
+			u.SendMessage("信息发送格式有误，格式：to|xxx|msg\n")
+			return
+		}
+		s.lock.RLock()
+		user, ok := s.onlineUsers[strings.ReplaceAll(arr[1], " ", "")]
+		s.lock.RUnlock()
+		if !ok {
+			u.SendMessage("接收者下线或不存在\n")
+			return
+		}
+		//发送信息
+		user.SendMessage("[" + u.Addr + "]" + u.Name + ": " + arr[2] + "\n")
 		return
 	}
 	//正常发送广播信息

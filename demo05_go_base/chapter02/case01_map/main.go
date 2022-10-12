@@ -11,7 +11,7 @@ type User struct {
 }
 
 func (u *User) String() string {
-	return fmt.Sprintf("User{Name=%s,Age=%d}", u.Name, u.Age)
+	return fmt.Sprintf("User{name=%s,Age=%d}", u.Name, u.Age)
 }
 
 func main() {
